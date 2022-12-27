@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { CommitsService } from './commits.service'
 import { Commit } from './interfaces/Commit';
 
@@ -8,7 +8,7 @@ export class CommitsController {
     constructor(private CommitsService: CommitsService) {}
     
     @Get()
-    getAllCommits(): Promise<Commit[]>{
-        return this.CommitsService.getCommits();
+    getAllCommits(@Query('page') page: string): Promise<Commit[]>{
+        return this.CommitsService.getCommits(page);
     }
 }

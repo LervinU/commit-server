@@ -3,10 +3,11 @@ import { Commit } from './interfaces/Commit';
 
 @Injectable()
 export class CommitsService {
-    private readonly commits: Commit[] = [];
+    private commits: Commit[] = [];
 
     private async create(url: string) {
         try {
+            this.commits = []
             const response = await fetch(url);
             const jsonResponse = await response.json();
             jsonResponse.forEach(commit => {
@@ -23,9 +24,9 @@ export class CommitsService {
         }
     }
 
-    async getCommits(): Promise<Commit[]> {
+    async getCommits(page: string): Promise<Commit[]> {
         try {
-            await this.create("https://api.github.com/repos/LervinU/commits-repo/commits");
+            await this.create(`https://api.github.com/repos/microsoft/vscode/commits?page=${page}`);
             return this.commits;
         } catch(e) {
             console.error(`getCommits: ${e}`);
