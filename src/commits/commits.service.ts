@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CommitQueryDto } from './dto/commit-query.dto';
 import { Commit } from './interfaces/Commit';
 
 @Injectable()
@@ -24,9 +25,10 @@ export class CommitsService {
         }
     }
 
-    async getCommits(page: string): Promise<Commit[]> {
+    async getCommits(commitQueryDto: CommitQueryDto): Promise<Commit[]> {
         try {
-            await this.create(`https://api.github.com/repos/microsoft/vscode/commits?page=${page}`);
+            const { page, perPage } = commitQueryDto;
+            await this.create(`https://api.github.com/repos/microsoft/vscode/commits?page=${page}&per_page=${perPage}`);
             return this.commits;
         } catch(e) {
             console.error(`getCommits: ${e}`);
