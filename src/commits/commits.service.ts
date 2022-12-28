@@ -16,7 +16,7 @@ export class CommitsService {
                     sha: commit.sha,
                     message: commit.commit.message,
                     author: commit.commit.author,
-                    avatar_url: commit.author.avatar_url
+                    avatar_url: commit?.author?.avatar_url
                 });
             });
             
@@ -27,8 +27,10 @@ export class CommitsService {
 
     async getCommits(commitQueryDto: CommitQueryDto): Promise<Commit[]> {
         try {
-            const { page, perPage } = commitQueryDto;
-            await this.create(`https://api.github.com/repos/microsoft/vscode/commits?page=${page}&per_page=${perPage}`);
+            let { page, perPage, author, repoName } = commitQueryDto;
+            author = author ? author : "LervinU";
+            repoName = repoName ? repoName : "commit-tracker";
+            await this.create(`https://api.github.com/repos/${author}/${repoName}/commits?page=${page}&per_page=${perPage}`);
             return this.commits;
         } catch(e) {
             console.error(`getCommits: ${e}`);
